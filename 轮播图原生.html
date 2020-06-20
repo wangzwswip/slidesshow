@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .box {
+            position: relative;
+            margin: 100px auto;
+            width: 500px;
+            height: 375px;
+            /* overflow: hidden; */
+        }
+        .images {
+            list-style: none;
+        }
+        .images li {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: 2s;
+            opacity: 0;
+        }
+        .num {
+            
+            list-style: none;
+            position: absolute;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+            
+            
+        }
+        
+        .num li {
+            display: inline-block;
+            margin: 5px;
+            border: 1px solid #000;
+            height: 20px;
+            width: 20px;
+            line-height: 20px;
+            text-align: center;
+            padding: 2px;
+            border-radius: 100%;
+            cursor: pointer;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.3);
+            user-select: none;
+        }
+        
+        .num .slide_current {
+            /* background: rgba(255, 255, 255, 0.7); */
+            background: rgba(255, 0, 0, 0.3);
+        }
+        .num li:hover {
+            background-color: #f00;
+        }
+        #btn {
+            width: 100%;
+            height: 50px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        #btn>button {
+            width: 30px;
+            height: 50px;
+            opacity: 0.6;
+            border: none;
+            outline: none;
+        }
+        .btn_left {
+            float: left;
+            padding-left: 1px;
+        }
+        .btn_right {
+            float: right;
+            padding-right: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <ul class="images">
+            <li style="opacity: 1;"><img src="./images/1.jpg" alt=""></li>
+            <li><img src="./images/2.jpg" alt=""></li>
+            <li><img src="./images/3.jpg" alt=""></li>
+            <li><img src="./images/4.jpg" alt=""></li>
+            <li><img src="./images/5.jpg" alt=""></li>
+        </ul>
+        <ul class="num" id="num">
+            <li class="slide_current">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ul>
+        <div id="btn">
+            <button class="btn_left">&lt</button>
+            <button class="btn_right">&gt</button>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script>
+            var lis = document.querySelectorAll(".images li");//getElementsByClassName("images").getElementsByTagName("li");
+            // var lis2 = lis.getElementsByTagName("li");
+            var dome = document.getElementsByClassName("box")[0];
+            var num_lis = document.querySelectorAll(".num li");
+            var num_ul = document.getElementById('num');
+            var btn_left = document.getElementsByClassName("btn_left")[0];
+            var btn_right = document.getElementsByClassName("btn_right")[0];
+            var index = 0;
+            function clearOp() {
+                // 将所有的标签透明度清空
+                for (var i=0; i<lis.length; i++) {
+                    lis[i].style.opacity = 0;
+                    num_lis[i].classList.remove('slide_current');
+                }
+                lis[index].style.opacity=1;
+                num_lis[index].classList.add('slide_current');
+            }
+            function slidesShow() {
+                index = (++index>(lis.length-1))?0:index;
+                clearOp();
+            }
+            var timer = setInterval("slidesShow()",2000);
+            btn_left.onclick = function() {
+                index=(--index<0)?(lis.length-1):index;
+                clearOp();
+            }
+            btn_right.onclick = function() {
+                index=(++index>(lis.length-1))?0:index;
+                clearOp();
+            }
+            dome.onmousemove = function() {
+                clearInterval(timer);
+            }
+            dome.onmouseout = function() {
+                timer = setInterval("slidesShow()",2000);
+            }
+            for(var i=0; i<num_lis.length;i++) {
+                num_lis[i]
+            }
+            num_lis.click=function(e) {
+                console.log(e.target);
+            }
+            num_ul.onclick = function(ev) {
+                var ev = ev || window.event;
+                var target = ev.target || ev.srcElement;
+                if (target.nodeName.toLowerCase() == 'li'){
+                    console.log(target.innerHTML-1);
+                    index=(target.innerHTML-1);
+                    clearOp();
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>

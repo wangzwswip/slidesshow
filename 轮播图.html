@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .box {
+            list-style: none;
+            position: relative;
+            margin: 50px auto;
+            width: 500px;
+            height: 375px;
+            /* overflow: hidden; */
+        }
+        .images {
+            list-style: none;
+        }
+        .images li {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+        .num {
+            
+            list-style: none;
+            position: absolute;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+            
+            
+        }
+        
+        .num li {
+            display: inline-block;
+            margin: 5px;
+            border: 1px solid #000;
+            height: 20px;
+            width: 20px;
+            line-height: 20px;
+            text-align: center;
+            padding: 2px;
+            border-radius: 100%;
+            cursor: pointer;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.3);
+            user-select: none;
+        }
+        
+        .num .slide_current {
+            /* background: rgba(255, 255, 255, 0.7); */
+            background: rgba(255, 0, 0, 0.3);
+        }
+        .num .current {
+            background-color: #f00;
+        }
+        .arrow {
+            font-size: 30px;
+            color: rgba(255, 255, 255, 0.5);
+            background: rgb(0, 0, 0, 0.5);
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 60px;
+            width: 30px;
+            line-height: 60px;
+            text-align: center;
+            display: none;
+        }
+        .left {
+            left: 0;
+            user-select: none;
+        }
+        .right {
+            right: 0;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <ul class="images">
+            <li><img src="./images/1.jpg" alt=""></li>
+            <li><img src="./images/2.jpg" alt=""></li>
+            <li><img src="./images/3.jpg" alt=""></li>
+            <li><img src="./images/4.jpg" alt=""></li>
+            <li><img src="./images/5.jpg" alt=""></li>
+        </ul>
+        <ul class="num">
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ul>
+        <div class="arrow left"><span>&lt</span></div>
+        <div class="arrow right"><span>&gt</span></div>
+        <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script>
+            var timer;
+            var sumLength = $('.images li').length;
+            var i = 0;
+            $(function() {
+                // $('.images li').eq(0).show();
+                imageShow();
+                startSlide();
+                // 图片停止
+                $('.box').hover(function(){
+                    clearInterval(timer);
+                    $('.arrow').show();
+                    // console.log("鼠标已进入，调用clearInterval")
+                },
+                function() {
+                    startSlide();
+                    $('.arrow').hide();
+                    // console.log("已调用startSlide");
+                });
+                // 数字显示与隐藏
+                $('.num li').hover(function(){
+                    clearInterval(timer);
+                    num_index = $(this).index();
+                    $('.num li').eq(num_index).addClass('current').siblings().removeClass('current');
+                    
+                },
+                function() {
+                    // startSlide();
+                    $('.num li').eq(num_index).removeClass('current');
+                    
+                }); 
+                $('.num li').click(function() {
+                    click_index = $(this).index();
+                    i = click_index;
+                    // startSlide();
+                    imageShow();
+                });
+                // 方向点击
+                $('.right span').click(function() {
+                    i+=1;
+                    if(i>sumLength-1) {
+                        i=0;
+                    }
+                    console.log(i);
+                    imageShow();
+                });
+                $('.left span').click(function() {
+                    i-=1;
+                    if(i<0) {
+                        i=sumLength-1;
+                    }
+                    imageShow();
+                })
+            })
+            function imageShow() {
+                $('.images li').eq(i).fadeIn().siblings().fadeOut();
+                $('.num li').eq(i).addClass('slide_current').siblings().removeClass('slide_current');
+                
+            }
+            function startSlide() {
+                timer = setInterval(function(){  
+                    i++;
+                    if (i>sumLength-1) {
+                        i=0;
+                    }
+                    imageShow();
+                },4000);
+            }
+        </script>
+    </div>
+</body>
+</html>
